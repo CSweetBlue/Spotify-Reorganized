@@ -7,6 +7,11 @@ y = [0, 1, 2, 3, 4, 5, 6, 8, 7]
 
 
 def dictSortPeakFun2(x, y):
+        """
+        Function: Sorts into a Peak shape.
+        Returns: (List of) New order of song keys.
+        """
+        
         d = dict(zip(y, x))
         yMod = sortPeakFunc(y)
         xMod = []
@@ -16,7 +21,11 @@ def dictSortPeakFun2(x, y):
         
         return xMod
 
-def dictSortToGreatestFunc(x, y):
+def sortToGreatestFunc(x, y):
+        """
+        Function: Sorts to increasing value.
+        Returns: (List of) New order of song keys.
+        """
         d = dict(zip(y, x))
         yMod = list(sorted(y))
         xMod = []
@@ -26,7 +35,13 @@ def dictSortToGreatestFunc(x, y):
         
         return xMod
 
-def dictSortToLeastFunc(x, y):
+
+def sortToLeastFunc(x, y):
+        """
+        Function: Sorts to decreasing value.
+        Returns: (List of) New order of song keys.
+        """
+        
         d = dict(zip(y, x))
         yMod = list(sorted(y, reverse = True))
         xMod = []
@@ -41,6 +56,11 @@ def dictSortToLeastFunc(x, y):
 
 
 def sortPeakFunc(y):
+        """
+        Function: Sorts into a Peak shape.
+        Returns: (List of) New order of values passed in.
+        """
+        
         count = 0
         z = copy.deepcopy(y)
         z.sort()
