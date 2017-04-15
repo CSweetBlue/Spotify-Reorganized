@@ -86,6 +86,41 @@ def sortToLeastFunc(songIDs, attrValues):
         print(str(songIDsMod))
         return songIDsMod
 
-sortToGreatestFunc(x, y)
-sortToLeastFunc(x, y)
-sortPeakFunc(x, y)
+def sortSpikeThenLevel(songIDs, attrValues):
+        """
+        Function: Sorts with spike increase, then gradual increase.
+        Returns: (List of) New order of song keys.
+        """
+        
+        d = dict(zip(attrValues, songIDs))
+        z = copy.deepcopy(attrValues)
+        z.sort() 
+        attrValuesMod = []
+        songIDsMod = []
+        
+        for i in range(int(len(z)/2)):
+                attrValuesMod.append(z[i])
+        
+        count = int(len(z)/2)
+        for i in range(int(len(z)/2), len(z)):
+                #print(i)
+                if not i % 2:
+                        #print(count)
+                        attrValuesMod.append(z[count])
+                        count+=1
+                
+                else:
+                        #print(count + int((len(z))/4))
+                        attrValuesMod.append(z[count + int((len(z))/4)])
+        
+        for i in range(len(attrValuesMod)):
+                songIDsMod.append(d.get(attrValuesMod[i]))
+                
+        print(str(attrValuesMod))
+        print(str(songIDsMod))
+        return songIDsMod
+
+#sortToGreatestFunc(x, y)
+#sortToLeastFunc(x, y)
+#sortPeakFunc(x, y)
+sortSpikeThenLevel(x, y)
