@@ -1,5 +1,8 @@
 <doctype html>
     <html>
+    <p>
+        {{sorted_array}}
+    </p>
     {% for item in sorted_array%}
     <p>
         <a href="/playlist?id={{item.id}}">{{item.name}}</a> {{item.id}}
