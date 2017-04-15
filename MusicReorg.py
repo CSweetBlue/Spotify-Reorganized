@@ -99,9 +99,8 @@ def playlist():
     # Get playlist songs
     playlist_songs_api_endpoint = "{}/playlists/{}/tracks".format(profile_data["href"], playlist_id)
     playlist_songs_response = requests.get(playlist_songs_api_endpoint, headers=authorization_header)
-    # playlist_songs_data = json.loads(playlist_songs_response)
-    eprint(playlist_songs_response)
-    return render_template("playlist.html", sorted_array=playlist_songs_response)
+    playlist_songs_data = json.loads(playlist_songs_response.text)
+    return render_template("playlist.html", sorted_array=playlist_songs_data)
 
 if __name__ == "__main__":
     app.run(debug=True, port=PORT)
