@@ -1,10 +1,46 @@
 import matplotlib.pyplot as plt
 import copy
 
-x = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+x = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
 y = [0, 1, 2, 3, 4, 5, 6, 8, 7]
 
-def sortSinFunc(y):
+
+def dictSortPeakFun2(x, y):
+        d = dict(zip(y, x))
+        yMod = sortPeakFunc(y)
+        xMod = []
+        
+        for i in range(len(yMod)):
+                xMod.append(d.get(yMod[i]))
+        
+        return xMod
+
+def dictSortToGreatestFunc(x, y):
+        d = dict(zip(y, x))
+        yMod = list(sorted(y))
+        xMod = []
+        
+        for i in range(len(yMod)):
+                xMod.append(d.get(yMod[i]))
+        
+        return xMod
+
+def dictSortToLeastFunc(x, y):
+        d = dict(zip(y, x))
+        yMod = list(sorted(y, reverse = True))
+        xMod = []
+        
+        for i in range(len(yMod)):
+                xMod.append(d.get(yMod[i]))
+        
+        return xMod
+
+
+#-----------------------------------------------------------------------#
+
+
+def sortPeakFunc(y):
         count = 0
         z = copy.deepcopy(y)
         z.sort()
@@ -24,16 +60,3 @@ def sortSinFunc(y):
         y = y2 + y1
         
         return y
-
-def sortToGreatestFunc(y):
-        
-        return list(sorted(y))
-
-def sortToLeastFunc(y):
-
-        return list(sorted(y, reverse = True))
-        
-
-yMod = sortToGreatestFunc(y)
-
-plt.scatter(x, yMod)
