@@ -3,80 +3,88 @@ import copy
 
 
 x = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
-y = [0, 1, 2, 3, 4, 5, 6, 8, 7]
+y = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 
-def dictSortPeakFun2(x, y):
+def sortPeakFun2(songIDs, attrValues):
         """
         Function: Sorts into a Peak shape.
         Returns: (List of) New order of song keys.
         """
         
-        d = dict(zip(y, x))
-        yMod = sortPeakFunc(y)
-        xMod = []
+        d = dict(zip(attrValues, songIDs))
+        attrValuesMod = sortPeakFunc(attrValues)
+        songIDsMod = []
         
-        for i in range(len(yMod)):
-                xMod.append(d.get(yMod[i]))
+        for i in range(len(attrValuesMod)):
+                songIDsMod.append(d.get(attrValuesMod[i]))
         
-        return xMod
+        print(str(attrValuesMod))
+        print(str(songIDsMod))
+        return songIDsMod
 
-def sortToGreatestFunc(x, y):
+def sortToGreatestFunc(songIDs, attrValues):
         """
         Function: Sorts to increasing value.
         Returns: (List of) New order of song keys.
         """
-        d = dict(zip(y, x))
-        yMod = list(sorted(y))
-        xMod = []
+        d = dict(zip(attrValues, songIDs))
+        attrValuesMod = list(sorted(attrValues))
+        songIDsMod = []
         
-        for i in range(len(yMod)):
-                xMod.append(d.get(yMod[i]))
+        for i in range(len(attrValuesMod)):
+                songIDsMod.append(d.get(attrValuesMod[i]))
         
-        return xMod
+        print(str(attrValuesMod))
+        print(str(songIDsMod))
+        return songIDsMod
 
 
-def sortToLeastFunc(x, y):
+def sortToLeastFunc(songIDs, attrValues):
         """
         Function: Sorts to decreasing value.
         Returns: (List of) New order of song keys.
         """
         
-        d = dict(zip(y, x))
-        yMod = list(sorted(y, reverse = True))
-        xMod = []
+        d = dict(zip(attrValues, songIDs))
+        attrValuesMod = list(sorted(attrValues, reverse = True))
+        songIDsMod = []
         
-        for i in range(len(yMod)):
-                xMod.append(d.get(yMod[i]))
+        for i in range(len(attrValuesMod)):
+                songIDsMod.append(d.get(attrValuesMod[i]))
         
-        return xMod
+        print(str(attrValuesMod))
+        print(str(songIDsMod))
+        return songIDsMod
 
-
+sortToGreatestFunc(x, y)
+sortToLeastFunc(x, y)
+sortPeakFun2(x, y)
 #-----------------------------------------------------------------------#
 
 
-def sortPeakFunc(y):
+def sortPeakFunc(attrValues):
         """
         Function: Sorts into a Peak shape.
         Returns: (List of) New order of values passed in.
         """
         
         count = 0
-        z = copy.deepcopy(y)
+        z = copy.deepcopy(attrValues)
         z.sort()
-        y1 = []
-        y2 = []
+        attrValuesHalf1 = []
+        attrValuesHalf2 = []
         
-        for i in range(len(y)):
+        for i in range(len(z)):
                 if count % 2:
-                        y1.append(z[-1])
+                        attrValuesHalf1.append(z[-1])
                 else:
-                        y2.append(z[-1])
+                        attrValuesHalf2.append(z[-1])
                 
                 z.remove(z[-1])
                 count+=1
         
-        y2 = y2[::-1]
-        y = y2 + y1
+        attrValuesHalf2 = attrValuesHalf2[::-1]
+        z = attrValuesHalf2 + attrValuesHalf1
         
-        return y
+        return z
