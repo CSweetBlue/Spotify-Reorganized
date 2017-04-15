@@ -1,6 +1,6 @@
 <doctype html>
     <html>
-    {{sorted_array}} {% for item in sorted_array%}
+    {% for item in sorted_array%}
     <p>
         <a href="{{item.track.external_urls.spotify}}">{{item.track.artists[0].name}} - {{item.track.name}}</a>
     </p>
