@@ -30,6 +30,7 @@ SHOW_DIALOG_str = str(SHOW_DIALOG_bool).lower()
 
 authorization_header = {}
 ids = []
+sortedIds = []
 
 query_params = {
     "response_type" : "code",
@@ -38,6 +39,22 @@ query_params = {
     "client_id": CLIENT_ID,
     "show_dialog": SHOW_DIALOG_str
 }
+
+def sortToGreatestFunc(songIDs, attrValues):
+        """
+        Function: Sorts to increasing value.
+        Returns: (List of) New order of song keys.
+        """
+        d = dict(zip(attrValues, songIDs))
+        attrValuesMod = list(sorted(attrValues))
+        songIDsMod = []
+        
+        for i in range(len(attrValuesMod)):
+                songIDsMod.append(d.get(attrValuesMod[i]))
+        
+        print(str(attrValuesMod))
+        print(str(songIDsMod))
+        return songIDsMod
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -117,6 +134,7 @@ def playlist():
 
 @app.route("/sort")
 def sort():
+    global sortedIds
     global authorization_header
     global ids
     track_ids = str(ids[0])
@@ -126,6 +144,31 @@ def sort():
     audio_features_response = requests.get(audio_features_endpoint, headers=authorization_header)
     audio_features_response_data = json.loads(audio_features_response.text)
 
+    energy = []
+    liveness = []
+    tempo = []
+    speechiness = []
+    acousticness = []
+    instrumentalness = []
+    danceability = []
+    loudness = []
+    valence = []
+
+    for i in audio_features_response_data["audio_features"]:
+	energy.append(i["energy"])
+	liveness.append(i["liveness"])
+	tempo.append(i["tempo"])
+
+	speechiness.append(i["speechiness"])
+	acousticness.append(i["acousticness"])
+	instrumentalness.append(i["instrumentalness"])
+
+	danceability.append(i["danceability"])
+	loudness.append(i["loudness"])
+	valence.append(i["valence"])
+
+    sortedIds = sortToGreatestFunc(ids, energy)
+	
     display_arr = audio_features_response_data["audio_features"]
     return render_template("audiofeatures.html", sorted_array=display_arr)
 
