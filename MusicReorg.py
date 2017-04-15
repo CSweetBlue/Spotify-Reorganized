@@ -42,11 +42,15 @@ def eprint(*args, **kwargs):
 
 @app.route("/")
 def index():
-    # Auth Step 1: Authorization
+    return render_template("index.html")
+
+@app.route("/authorize")
+def authorize():
+	# Auth Step 1: Authorization
     url_args = "&".join(["{}={}".format(key, urllib.quote(val)) for key,val in query_params.iteritems()])
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
     return redirect(auth_url)
-
+	
 @app.route("/callback")
 def callback():
     global authorization_header
@@ -84,7 +88,7 @@ def callback():
 
     # Combine profile and playlist data to display
     display_arr = playlist_data["items"]
-    return render_template("index.html",sorted_array=display_arr)
+    return render_template("indexAlt.html",sorted_array=display_arr)
 
 @app.route("/playlist")
 def playlist():
