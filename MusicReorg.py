@@ -34,7 +34,8 @@ query_params = {
     "response_type" : "code",
     "redirect_uri" : REDIRECT_URI,
     "scope" : SCOPE,
-    "client_id": CLIENT_ID
+    "client_id": CLIENT_ID,
+    "show_dialog": SHOW_DIALOG_str
 }
 
 def eprint(*args, **kwargs):
@@ -50,7 +51,7 @@ def authorize():
     url_args = "&".join(["{}={}".format(key, urllib.quote(val)) for key,val in query_params.iteritems()])
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
     return redirect(auth_url)
-	
+
 @app.route("/callback")
 def callback():
     global authorization_header
