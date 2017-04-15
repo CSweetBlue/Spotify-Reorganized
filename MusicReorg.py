@@ -129,6 +129,9 @@ def sort():
     display_arr = audio_features_response_data["audio_features"]
     return render_template("audiofeatures.html", sorted_array=display_arr)
 
+@app.route("/create")
+def create():
+    global authorization_header
 
 if __name__ == "__main__":
     app.run(debug=True, port=PORT)
