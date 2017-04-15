@@ -29,6 +29,7 @@ SHOW_DIALOG_bool = True
 SHOW_DIALOG_str = str(SHOW_DIALOG_bool).lower()
 
 authorization_header = {}
+ids = []
 
 query_params = {
     "response_type" : "code",
@@ -93,8 +94,7 @@ def callback():
 
 @app.route("/playlist")
 def playlist():
-    global authorization_header
-    print(authorization_header)
+    global authorization_header, ids
     # Get profile data
     user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
     profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
@@ -107,7 +107,28 @@ def playlist():
     playlist_songs_data = json.loads(playlist_songs_response.text)
 
     display_arr = playlist_songs_data["items"]
+    ids = []
+    for item in display_arr:
+        ids.append(item["track"]["id"])
+        sys.stderr.write(str(item["track"]["id"]) + '\n')
+    print(str(ids))
+    print("test")
     return render_template("playlist.html", sorted_array=display_arr)
+
+@app.route("/sort")
+def sort():
+    global authorization_header
+    global ids
+    track_ids = str(ids[0])
+    for i in range(len(ids)-1):
+        track_ids += "," + str(ids[i+1])
+    audio_features_endpoint = "{}/audio-features?ids={}".format(SPOTIFY_API_URL, track_ids)
+    audio_features_response = requests.get(audio_features_endpoint, headers=authorization_header)
+    audio_features_response_data = json.loads(audio_features_response.text)
+
+    display_arr = audio_features_response_data["audio_features"]
+    return render_template("audiofeatures.html", sorted_array=display_arr)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=PORT)
