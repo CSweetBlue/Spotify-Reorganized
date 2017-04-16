@@ -5,6 +5,7 @@ from flask import Flask, request, redirect, g, render_template
 import requests
 import base64
 import urllib
+import copy
 
 app = Flask(__name__)
 
@@ -48,10 +49,10 @@ def sortToGreatestFunc(songIDs, attrValues):
         d = dict(zip(attrValues, songIDs))
         attrValuesMod = list(sorted(attrValues))
         songIDsMod = []
-        
+
         for i in range(len(attrValuesMod)):
                 songIDsMod.append(d.get(attrValuesMod[i]))
-        
+
         print(str(attrValuesMod))
         print(str(songIDsMod))
         return songIDsMod
@@ -109,13 +110,14 @@ def callback():
     display_arr = playlist_data["items"]
     return render_template("indexAlt.html",sorted_array=display_arr)
 
-@app.route("/playlist")
+@app.route("/playlist", methods=['GET', 'POST'])
 def playlist():
-    global authorization_header, ids
+    global authorization_header, ids, sortedIds
     # Get profile data
     user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
     profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
     profile_data = json.loads(profile_response.text)
+
     # Get playlist id
     playlist_id = request.args.get("id")
     # Get playlist songs
@@ -123,14 +125,13 @@ def playlist():
     playlist_songs_response = requests.get(playlist_songs_api_endpoint, headers=authorization_header)
     playlist_songs_data = json.loads(playlist_songs_response.text)
 
-    display_arr = playlist_songs_data["items"]
     ids = []
-    for item in display_arr:
+    for item in playlist_songs_data["items"]:
         ids.append(item["track"]["id"])
         sys.stderr.write(str(item["track"]["id"]) + '\n')
-    print(str(ids))
-    print("test")
+    display_arr = playlist_songs_data["items"]
     return render_template("playlist.html", sorted_array=display_arr)
+
 
 @app.route("/sort")
 def sort():
@@ -155,22 +156,52 @@ def sort():
     valence = []
 
     for i in audio_features_response_data["audio_features"]:
-	energy.append(i["energy"])
-	liveness.append(i["liveness"])
-	tempo.append(i["tempo"])
+    	energy.append(i["energy"])
+    	liveness.append(i["liveness"])
+    	tempo.append(i["tempo"])
 
-	speechiness.append(i["speechiness"])
-	acousticness.append(i["acousticness"])
-	instrumentalness.append(i["instrumentalness"])
+    	speechiness.append(i["speechiness"])
+    	acousticness.append(i["acousticness"])
+    	instrumentalness.append(i["instrumentalness"])
 
-	danceability.append(i["danceability"])
-	loudness.append(i["loudness"])
-	valence.append(i["valence"])
+    	danceability.append(i["danceability"])
+    	loudness.append(i["loudness"])
+    	valence.append(i["valence"])
 
     sortedIds = sortToGreatestFunc(ids, energy)
-	
-    display_arr = audio_features_response_data["audio_features"]
-    return render_template("audiofeatures.html", sorted_array=display_arr)
+
+    for i in sortedIds:
+        sys.stderr.write(str(i) + "\n")
+
+    # display_arr = audio_features_response_data["audio_features"]
+
+    user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
+    profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
+    profile_data = json.loads(profile_response.text)
+
+    content = "application/json"
+    playlist_name = "sortedoutput"
+    header = copy.deepcopy(authorization_header)
+    header["Content-Type"] = "{}".format(content)
+
+    data = {"name":"sortedoutput"}
+
+    playlist_api_endpoint = "{}/playlists".format(profile_data["href"])
+    playlist_response = requests.post(playlist_api_endpoint, headers=header, data=json.dumps(data))
+    playlist_data = json.loads(playlist_response.text)
+
+    playlist_id = playlist_data["id"]
+    uris = []
+    for i in sortedIds:
+        uris.append("spotify:track:"+i)
+    body = {"uris":uris}
+    playlist_songs_api_endpoint = "{}/playlists/{}/tracks".format(profile_data["href"], playlist_id)
+    playlist_songs_response = requests.post(playlist_songs_api_endpoint, headers=header, data=json.dumps(body))
+    playlist_songs_data = json.loads(playlist_songs_response.text)
+
+    return str(playlist_songs_data)
+    # return render_template("audiofeatures.html", sorted_array=display_arr)
+
 
 
 if __name__ == "__main__":
