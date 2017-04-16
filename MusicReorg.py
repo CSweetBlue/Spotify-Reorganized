@@ -236,7 +236,21 @@ def sort():
         	loudness.append(i["loudness"])
         	valence.append(i["valence"])
 
-        sortedIds = sortPeakFunc(ids, energy)
+	sortedIds = []
+	
+	dictionary = {"energy": energy, "liveness": liveness, "temp": tempo, "speechiness": speechiness, "acousticness": acousticness, "instrumentalness": instrumentalness, "danceability": danceability, "loudness": loudness, "valence": valence}
+	if method == peek:
+		sortedIds = sortPeakFunc(ids, str(attribute))
+		
+	elif method == quickthenslowclimb:
+		sortedIds = sortPeakFunc(ids, str(attribute))
+		
+	elif method == toleast:
+		sortedIds = sortPeakFunc(ids, str(attribute))
+		
+	elif method == togreatest:
+		sortedIds = sortPeakFunc(ids, str(attribute))
+        
 
         # for i in sortedIds:
         #     sys.stderr.write(str(i) + "\n")
