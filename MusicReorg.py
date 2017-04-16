@@ -104,6 +104,57 @@ def sortToGreatestFunc(songIDs, attrValues):
         print(str(songIDsMod))
         return songIDsMod
 
+def sortToLeastFunc(songIDs, attrValues):
+        """
+        Function: Sorts to decreasing value.
+        Returns: (List of) New order of song keys.
+        """
+        
+        d = dict(zip(attrValues, songIDs))
+        attrValuesMod = list(sorted(attrValues, reverse = True))
+        songIDsMod = []
+        
+        for i in range(len(attrValuesMod)):
+                songIDsMod.append(d.get(attrValuesMod[i]))
+        
+        #print(str(attrValuesMod))
+        #print(str(songIDsMod))
+        return songIDsMod
+
+def sortSpikeThenLevel(songIDs, attrValues):
+        """
+        Function: Sorts with spike increase, then gradual increase.
+        Returns: (List of) New order of song keys.
+        """
+        
+        d = dict(zip(attrValues, songIDs))
+        z = copy.deepcopy(attrValues)
+        z.sort() 
+        attrValuesMod = []
+        songIDsMod = []
+        
+        for i in range(int(len(z)/2)):
+                attrValuesMod.append(z[i])
+        
+        count = int(len(z)/2)
+        for i in range(int(len(z)/2), len(z)):
+                #print(i)
+                if not i % 2:
+                        #print(count)
+                        attrValuesMod.append(z[count])
+                        count+=1
+                
+                else:
+                        #print(count + int((len(z))/4))
+                        attrValuesMod.append(z[count + int((len(z))/4) -1])
+        
+        for i in range(len(attrValuesMod)):
+                songIDsMod.append(d.get(attrValuesMod[i]))
+                
+        print(str(attrValuesMod))
+        print(str(songIDsMod))
+        return songIDsMod
+
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
@@ -243,13 +294,13 @@ def sort():
 		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
 		
 	elif method == quickthenslowclimb:
-		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
+		sortedIds = sortSpikeThenLevel(ids, dictionary.get(str(attribute)))
 		
 	elif method == toleast:
-		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
+		sortedIds = sortToLeastFunc(ids, dictionary.get(str(attribute)))
 		
 	elif method == togreatest:
-		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
+		sortedIds = sortToGreatestFunc(ids, dictionary.get(str(attribute)))
         
 
         # for i in sortedIds:
