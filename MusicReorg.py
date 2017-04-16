@@ -111,6 +111,18 @@ def eprint(*args, **kwargs):
 def index():
     return render_template("index.html")
 
+@app.rounte("/hello")
+def hello():
+    f = open('helloworld.html','w')
+
+    message = """<html>
+    <head></head>
+    <body><p>Hello World!</p></body>
+    </html>"""
+
+    f.write(message)
+    f.close()
+
 @app.route("/authorize")
 def authorize():
 	# Auth Step 1: Authorization
