@@ -195,46 +195,54 @@ def playlist():
 
 @app.route("/sort")
 def sort():
-    global sortedIds
-    global authorization_header
-    global ids
-    track_ids = str(ids[0])
-    for i in range(len(ids)-1):
-        track_ids += "," + str(ids[i+1])
-    audio_features_endpoint = "{}/audio-features?ids={}".format(SPOTIFY_API_URL, track_ids)
-    audio_features_response = requests.get(audio_features_endpoint, headers=authorization_header)
-    audio_features_response_data = json.loads(audio_features_response.text)
+    if (request.method == 'GET'):
+        return render_template("pickSortMethod.html")
+    elif (request.method == 'POST'):
+        print(request.form['Attribute'])
+        print (request.form['Method'])
+        global sortedIds
+        global authorization_header
+        global ids
+        track_ids = str(ids[0])
+        for i in range(len(ids)-1):
+            track_ids += "," + str(ids[i+1])
+        audio_features_endpoint = "{}/audio-features?ids={}".format(SPOTIFY_API_URL, track_ids)
+        audio_features_response = requests.get(audio_features_endpoint, headers=authorization_header)
+        audio_features_response_data = json.loads(audio_features_response.text)
 
-    energy = []
-    liveness = []
-    tempo = []
-    speechiness = []
-    acousticness = []
-    instrumentalness = []
-    danceability = []
-    loudness = []
-    valence = []
+        energy = []
+        liveness = []
+        tempo = []
+        speechiness = []
+        acousticness = []
+        instrumentalness = []
+        danceability = []
+        loudness = []
+        valence = []
 
-    for i in audio_features_response_data["audio_features"]:
-    	energy.append(i["energy"])
-    	liveness.append(i["liveness"])
-    	tempo.append(i["tempo"])
+        for i in audio_features_response_data["audio_features"]:
+        	energy.append(i["energy"])
+        	liveness.append(i["liveness"])
+        	tempo.append(i["tempo"])
 
-    	speechiness.append(i["speechiness"])
-    	acousticness.append(i["acousticness"])
-    	instrumentalness.append(i["instrumentalness"])
+        	speechiness.append(i["speechiness"])
+        	acousticness.append(i["acousticness"])
+        	instrumentalness.append(i["instrumentalness"])
 
-    	danceability.append(i["danceability"])
-    	loudness.append(i["loudness"])
-    	valence.append(i["valence"])
+        	danceability.append(i["danceability"])
+        	loudness.append(i["loudness"])
+        	valence.append(i["valence"])
 
-    sortedIds = sortPeakFunc(ids, energy)
+        sortedIds = sortPeakFunc(ids, energy)
 
-    for i in sortedIds:
-        sys.stderr.write(str(i) + "\n")
+        for i in sortedIds:
+            sys.stderr.write(str(i) + "\n")
 
-    # display_arr = audio_features_response_data["audio_features"]
+        display_arr = audio_features_response_data["audio_features"]
+        return str(display_arr)
 
+@app.route("/create")
+def create():
     user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
     profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
     profile_data = json.loads(profile_response.text)
@@ -260,8 +268,6 @@ def sort():
     playlist_songs_data = json.loads(playlist_songs_response.text)
 
     return str(playlist_songs_data)
-    # return render_template("audiofeatures.html", sorted_array=display_arr)
-
 
 
 if __name__ == "__main__":
