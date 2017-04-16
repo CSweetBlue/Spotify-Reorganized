@@ -240,16 +240,16 @@ def sort():
 	
 	dictionary = {"energy": energy, "liveness": liveness, "temp": tempo, "speechiness": speechiness, "acousticness": acousticness, "instrumentalness": instrumentalness, "danceability": danceability, "loudness": loudness, "valence": valence}
 	if method == peek:
-		sortedIds = sortPeakFunc(ids, str(attribute))
+		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
 		
 	elif method == quickthenslowclimb:
-		sortedIds = sortPeakFunc(ids, str(attribute))
+		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
 		
 	elif method == toleast:
-		sortedIds = sortPeakFunc(ids, str(attribute))
+		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
 		
 	elif method == togreatest:
-		sortedIds = sortPeakFunc(ids, str(attribute))
+		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
         
 
         # for i in sortedIds:
