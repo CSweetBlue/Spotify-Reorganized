@@ -32,6 +32,8 @@ SHOW_DIALOG_str = str(SHOW_DIALOG_bool).lower()
 authorization_header = {}
 ids = []
 sortedIds = []
+method = ''
+attribute = ''
 
 query_params = {
     "response_type" : "code",
@@ -109,14 +111,14 @@ def sortToLeastFunc(songIDs, attrValues):
         Function: Sorts to decreasing value.
         Returns: (List of) New order of song keys.
         """
-        
+
         d = dict(zip(attrValues, songIDs))
         attrValuesMod = list(sorted(attrValues, reverse = True))
         songIDsMod = []
-        
+
         for i in range(len(attrValuesMod)):
                 songIDsMod.append(d.get(attrValuesMod[i]))
-        
+
         #print(str(attrValuesMod))
         #print(str(songIDsMod))
         return songIDsMod
@@ -126,16 +128,16 @@ def sortSpikeThenLevel(songIDs, attrValues):
         Function: Sorts with spike increase, then gradual increase.
         Returns: (List of) New order of song keys.
         """
-        
+
         d = dict(zip(attrValues, songIDs))
         z = copy.deepcopy(attrValues)
-        z.sort() 
+        z.sort()
         attrValuesMod = []
         songIDsMod = []
-        
+
         for i in range(int(len(z)/2)):
                 attrValuesMod.append(z[i])
-        
+
         count = int(len(z)/2)
         for i in range(int(len(z)/2), len(z)):
                 #print(i)
@@ -143,14 +145,14 @@ def sortSpikeThenLevel(songIDs, attrValues):
                         #print(count)
                         attrValuesMod.append(z[count])
                         count+=1
-                
+
                 else:
                         #print(count + int((len(z))/4))
                         attrValuesMod.append(z[count + int((len(z))/4) -1])
-        
+
         for i in range(len(attrValuesMod)):
                 songIDsMod.append(d.get(attrValuesMod[i]))
-                
+
         print(str(attrValuesMod))
         print(str(songIDsMod))
         return songIDsMod
@@ -287,21 +289,21 @@ def sort():
         	loudness.append(i["loudness"])
         	valence.append(i["valence"])
 
-	sortedIds = []
-	
-	dictionary = {"energy": energy, "liveness": liveness, "temp": tempo, "speechiness": speechiness, "acousticness": acousticness, "instrumentalness": instrumentalness, "danceability": danceability, "loudness": loudness, "valence": valence}
-	if method == peek:
-		sortedIds = sortPeakFunc(ids, dictionary.get(str(attribute)))
-		
-	elif method == quickthenslowclimb:
-		sortedIds = sortSpikeThenLevel(ids, dictionary.get(str(attribute)))
-		
-	elif method == toleast:
-		sortedIds = sortToLeastFunc(ids, dictionary.get(str(attribute)))
-		
-	elif method == togreatest:
-		sortedIds = sortToGreatestFunc(ids, dictionary.get(str(attribute)))
-        
+    	sortedIds = []
+
+    	dictionary = {"energy": energy, "liveness": liveness, "temp": tempo, "speechiness": speechiness, "acousticness": acousticness, "instrumentalness": instrumentalness, "danceability": danceability, "loudness": loudness, "valence": valence}
+        sys.stderr.write(str(method) + '\n')
+    	sortedIds = sortPeakFunc(ids, energy)
+
+    	# elif str(method) == "quickthenslowclimb":
+    	# 	sortedIds = sortSpikeThenLevel(ids, dictionary.get(str(attribute)))
+        #
+        # elif str(method) == "toleast":
+    	# 	sortedIds = sortToLeastFunc(ids, dictionary.get(str(attribute)))
+        #
+    	# elif str(method) == "togreatest":
+    	# 	sortedIds = sortToGreatestFunc(ids, dictionary.get(str(attribute)))
+
 
         # for i in sortedIds:
         #     sys.stderr.write(str(i) + "\n")
