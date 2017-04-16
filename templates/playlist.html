@@ -1,0 +1,10 @@
+<doctype html>
+    <html>
+    {% for item in sorted_array%}
+    <p>
+        <a href="{{item.track.external_urls.spotify}}">{{item.track.artists[0].name}} - {{item.track.name}}</a>
+    </p>
+    {% endfor %}
+    <button onclick="location.href='https://0991601a.ngrok.io/sort';">Sort Songs</button>
+
+    </html>
