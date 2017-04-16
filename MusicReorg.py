@@ -21,7 +21,7 @@ API_VERSION = "v1"
 SPOTIFY_API_URL = "{}/{}".format(SPOTIFY_API_BASE_URL, API_VERSION)
 
 # Server side Parameters
-CLIENT_SIDE_URL ='http://4270a667.ngrok.io'
+CLIENT_SIDE_URL ='http://0991601a.ngrok.io'
 PORT = 8080
 REDIRECT_URI = "{}/callback".format(CLIENT_SIDE_URL)
 SCOPE = "playlist-modify-public playlist-modify-private"
@@ -240,9 +240,33 @@ def sort():
 
         # for i in sortedIds:
         #     sys.stderr.write(str(i) + "\n")
+        user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
+        profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
+        profile_data = json.loads(profile_response.text)
 
-        display_arr = audio_features_response_data["audio_features"]
-        return str(display_arr)
+        content = "application/json"
+        playlist_name = "sortedoutput"
+        header = copy.deepcopy(authorization_header)
+        header["Content-Type"] = "{}".format(content)
+
+        data = {"name":"sortedoutput"}
+
+        playlist_api_endpoint = "{}/playlists".format(profile_data["href"])
+        playlist_response = requests.post(playlist_api_endpoint, headers=header, data=json.dumps(data))
+        playlist_data = json.loads(playlist_response.text)
+
+        playlist_id = playlist_data["id"]
+        uris = []
+        for i in sortedIds:
+            uris.append("spotify:track:"+i)
+        body = {"uris":uris}
+        playlist_songs_api_endpoint = "{}/playlists/{}/tracks".format(profile_data["href"], playlist_id)
+        playlist_songs_response = requests.post(playlist_songs_api_endpoint, headers=header, data=json.dumps(body))
+        playlist_songs_data = json.loads(playlist_songs_response.text)
+
+        return str(playlist_songs_data)
+        # display_arr = audio_features_response_data["audio_features"]
+        # return str(display_arr)
 
 @app.route("/create")
 def create():
