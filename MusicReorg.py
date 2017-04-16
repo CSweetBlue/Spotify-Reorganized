@@ -41,6 +41,53 @@ query_params = {
     "show_dialog": SHOW_DIALOG_str
 }
 
+def sortPeakSupport(attrValues):
+        """
+        Function: Sorts into a Peak shape.
+        Returns: (List of) New order of values passed in.
+        """
+        
+        count = 0
+        z = copy.deepcopy(attrValues)
+        z.sort()
+        attrValuesHalf1 = []
+        attrValuesHalf2 = []
+        
+        for i in range(len(z)):
+                if count % 2:
+                        attrValuesHalf1.append(z[-1])
+                else:
+                        attrValuesHalf2.append(z[-1])
+                
+                z.remove(z[-1])
+                count+=1
+        
+        attrValuesHalf2 = attrValuesHalf2[::-1]
+        z = attrValuesHalf2 + attrValuesHalf1
+        
+        return z
+
+
+#-----------------------------------------------------------------------#
+
+
+def sortPeakFunc(songIDs, attrValues):
+        """
+        Function: Sorts into a Peak shape.
+        Returns: (List of) New order of song keys.
+        """
+        
+        d = dict(zip(attrValues, songIDs))
+        attrValuesMod = sortPeakSupport(attrValues)
+        songIDsMod = []
+        
+        for i in range(len(attrValuesMod)):
+                songIDsMod.append(d.get(attrValuesMod[i]))
+        
+        print(str(attrValuesMod))
+        print(str(songIDsMod))
+        return songIDsMod
+
 def sortToGreatestFunc(songIDs, attrValues):
         """
         Function: Sorts to increasing value.
@@ -168,7 +215,7 @@ def sort():
     	loudness.append(i["loudness"])
     	valence.append(i["valence"])
 
-    sortedIds = sortToGreatestFunc(ids, energy)
+    sortedIds = sortPeakFunc(ids, energy)
 
     for i in sortedIds:
         sys.stderr.write(str(i) + "\n")
