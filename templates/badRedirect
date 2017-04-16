@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<title>NOpe</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1,h2{font-family: "Raleway", sans-serif}
+html,body{ margin:0; padding:0; height:100%; width:100%; }
+#nope{
+  height:100%;
+  width:100%;
+  overflow:hidden;
+}
+</style>
+<body>
+
+<!-- Nope -->
+<div class="w3-container w3-pale-blue" id="nope">
+    <h1 class="w3-center w3-text-grey"><b>NOpe.</b></h1>
+    </h4><br>
+</div>
+
+</body>
+</html>
