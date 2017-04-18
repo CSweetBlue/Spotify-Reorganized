@@ -1,10 +1,6 @@
 import matplotlib.pyplot as plt
 import copy
 
-
-x = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
-y = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-
 def sortPeakSupport(attrValues):
         """
         Function: Sorts into a Peak shape.
@@ -119,8 +115,3 @@ def sortSpikeThenLevel(songIDs, attrValues):
         print(str(attrValuesMod))
         print(str(songIDsMod))
         return songIDsMod
-
-#sortToGreatestFunc(x, y)
-#sortToLeastFunc(x, y)
-#sortPeakFunc(x, y)
-sortSpikeThenLevel(x, y)
